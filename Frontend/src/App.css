@@ -1,0 +1,304 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #172033;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+/* Navbar */
+
+.navbar {
+  height: 70px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8%;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #4b5563;
+}
+
+.login-btn {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+/* Hero */
+
+.hero {
+  max-width: 1100px;
+  margin: auto;
+  padding: 80px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.small-heading {
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+
+.hero h1 {
+  font-size: 52px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.hero-text {
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+/* Calculator */
+
+.calculator-card {
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.calculator-card h2 {
+  margin-bottom: 25px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 16px;
+}
+
+.input-group input:focus {
+  outline: 2px solid #2563eb;
+  border-color: transparent;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+}
+
+.calculate-btn,
+.clear-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.calculate-btn {
+  border: none;
+  background: #2563eb;
+  color: white;
+}
+
+.clear-btn {
+  background: white;
+  border: 1px solid #d1d5db;
+}
+
+.error {
+  margin-top: 15px;
+  color: #dc2626;
+}
+
+/* Result */
+
+.result-box {
+  margin-top: 25px;
+  padding: 20px;
+  background: #f1f5ff;
+  border-radius: 10px;
+}
+
+.result-box h3 {
+  margin-bottom: 15px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.result-grid div {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result-grid span {
+  display: block;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.result-grid strong {
+  font-size: 28px;
+}
+
+.calculation {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Information */
+
+.info-section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 60px 20px;
+}
+
+.info-section h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.info-section p {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.formula {
+  margin-top: 25px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.example {
+  margin-top: 20px;
+  padding: 25px;
+  background: white;
+  border-radius: 10px;
+}
+
+.example h3 {
+  margin-bottom: 15px;
+}
+
+.example strong {
+  display: block;
+  margin-top: 10px;
+}
+
+/* Examples */
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.example-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.example-card strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.example-card span {
+  color: #64748b;
+}
+
+/* Footer */
+
+footer {
+  padding: 30px;
+  text-align: center;
+  background: #172033;
+  color: white;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .nav-links a {
+    display: none;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 50px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+
+  .examples-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .calculator-card {
+    padding: 25px;
+  }
+
+  .examples-grid {
+    grid-template-columns: 1fr;
+  }
+}
