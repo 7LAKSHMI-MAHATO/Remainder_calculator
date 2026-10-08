@@ -10,8 +10,6 @@ const jwt = require("jsonwebtoken");
 const protect = require("./middleware/authMiddleware");
 const optionalAuth = require("./middleware/optionalAuth");
 
-
-
 const app = express();
 
 app.use(cors());
@@ -67,6 +65,7 @@ app.post("/api/auth/register", async (req, res) => {
         });
     }
 });
+
 
 // Login user
 app.post("/api/auth/login", async (req, res) => {
@@ -128,6 +127,7 @@ app.post("/api/auth/login", async (req, res) => {
     }
 });
 
+
 // Protected test route
 app.get("/api/auth/me", protect, (req, res) => {
     res.json({
@@ -137,9 +137,30 @@ app.get("/api/auth/me", protect, (req, res) => {
 });
 
 
+// Get logged-in user's calculation history
+app.get("/api/calculations/history", protect, async (req, res) => {
+    try {
+        const calculations = await Calculation.find({
+            user: req.user.userId
+        }).sort({ createdAt: -1 });
+
+        res.json({
+            calculations
+        });
+    } catch (error) {
+        console.log("History error:", error.message);
+
+        res.status(500).json({
+            message: "Failed to fetch calculation history"
+        });
+    }
+});
+
+
 // Calculate remainder
 app.post("/api/calculate", optionalAuth, async (req, res) => {
-    console.log("Calculate API called");
+    // console.log("Calculate API called");
+
     const { dividend, divisor } = req.body;
 
     if (dividend === undefined || divisor === undefined) {
@@ -158,15 +179,23 @@ app.post("/api/calculate", optionalAuth, async (req, res) => {
     const remainder = dividend % divisor;
 
     try {
-         console.log("Saving calculation to MongoDB...");
-        const calculation = await Calculation.create({
+        // console.log("Saving calculation to MongoDB...");
+
+        const calculationData = {
             dividend,
             divisor,
             quotient,
             remainder
-        });
+        };
 
-    console.log("Calculation saved:", calculation);
+        // If user is logged in, attach their user ID
+        if (req.user) {
+            calculationData.user = req.user.userId;
+        }
+
+        const calculation = await Calculation.create(calculationData);
+
+        // console.log("Calculation saved:", calculation);
 
         res.json({
             dividend,
@@ -176,13 +205,14 @@ app.post("/api/calculate", optionalAuth, async (req, res) => {
             calculationId: calculation._id
         });
     } catch (error) {
-        console.log("Database error:", error.message);
+        // console.log("Database error:", error.message);
 
         res.status(500).json({
             message: "Failed to save calculation"
         });
     }
 });
+
 
 // MongoDB connection
 mongoose
@@ -193,5 +223,6 @@ mongoose
     .catch((error) => {
         console.log("MongoDB connection error:", error.message);
     });
+
 
 module.exports = app;

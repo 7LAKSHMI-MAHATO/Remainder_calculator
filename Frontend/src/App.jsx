@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "./api";
 import "./App.css";
 
 function App() {
@@ -24,18 +25,15 @@ function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/calculate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          dividend: Number(dividend),
-          divisor: Number(divisor),
-        }),
-      });
+      const response = await api.post(
+    "/calculate",
+    {
+        dividend: Number(dividend),
+        divisor: Number(divisor)
+    }
+);
 
-      const data = await response.json();
+const data = response.data;
 
       if (!response.ok) {
         setError(data.message);
