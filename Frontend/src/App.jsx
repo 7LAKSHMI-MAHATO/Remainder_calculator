@@ -1,16 +1,22 @@
+
 import { useState } from "react";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import api from "./api";
+import Register from "./Register";
+import Login from "./Login";
 import "./App.css";
 
-function App() {
+function Calculator() {
   const [dividend, setDividend] = useState("");
   const [divisor, setDivisor] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const navigate = useNavigate();
+
   const calculateRemainder = async (e) => {
     e.preventDefault();
-
     setResult(null);
     setError("");
 
@@ -25,20 +31,18 @@ function App() {
     }
 
     try {
-      const response = await api.post(
-    "/calculate",
-    {
+      const response = await api.post("/calculate", {
         dividend: Number(dividend),
-        divisor: Number(divisor)
-    }
-);
+        divisor: Number(divisor),
+      });
 
-const data = response.data;
-
-      
-      setResult(data);
+      setResult(response.data);
     } catch (error) {
-      setError("Unable to connect to the server.");
+      if (error.response) {
+        setError(error.response.data.message || "Calculation failed.");
+      } else {
+        setError("Unable to connect to the server.");
+      }
     }
   };
 
@@ -47,6 +51,13 @@ const data = response.data;
     setDivisor("");
     setResult(null);
     setError("");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+    window.location.reload();
   };
 
   return (
@@ -58,7 +69,32 @@ const data = response.data;
           <a href="#calculator">Calculator</a>
           <a href="#how-it-works">How It Works</a>
           <a href="#examples">Examples</a>
-          <button className="login-btn">Login</button>
+
+          {user ? (
+            <>
+              <Link to="/profile" className="login-btn">
+                👤 {user.name}
+              </Link>
+
+              <button
+                type="button"
+                className="login-btn"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="login-btn">
+                Login
+              </Link>
+
+              <Link to="/register" className="login-btn">
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -67,9 +103,7 @@ const data = response.data;
           <div className="hero-content">
             <p className="small-heading">SIMPLE • FAST • FREE</p>
 
-            <h1>
-              Remainder Calculator
-            </h1>
+            <h1>Remainder Calculator</h1>
 
             <p className="hero-text">
               Quickly calculate the quotient and remainder of any division.
@@ -82,9 +116,10 @@ const data = response.data;
 
             <form onSubmit={calculateRemainder}>
               <div className="input-group">
-                <label>Dividend</label>
+                <label htmlFor="dividend">Dividend</label>
 
                 <input
+                  id="dividend"
                   type="number"
                   value={dividend}
                   onChange={(e) => setDividend(e.target.value)}
@@ -93,9 +128,10 @@ const data = response.data;
               </div>
 
               <div className="input-group">
-                <label>Divisor</label>
+                <label htmlFor="divisor">Divisor</label>
 
                 <input
+                  id="divisor"
                   type="number"
                   value={divisor}
                   onChange={(e) => setDivisor(e.target.value)}
@@ -159,11 +195,8 @@ const data = response.data;
 
           <div className="example">
             <h3>Example: 25 ÷ 4</h3>
-
             <p>4 × 6 = 24</p>
-
             <p>25 − 24 = 1</p>
-
             <strong>Remainder = 1</strong>
           </div>
         </section>
@@ -199,6 +232,16 @@ const data = response.data;
         <p>© 2026 RemainderCalc. Free online remainder calculator.</p>
       </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Calculator />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 }
 

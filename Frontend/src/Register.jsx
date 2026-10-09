@@ -1,4 +1,6 @@
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "./api";
 
 function Register() {
@@ -6,13 +8,12 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    setMessage("");
     setError("");
 
     if (!name || !email || !password) {
@@ -21,20 +22,23 @@ function Register() {
     }
 
     try {
-      const response = await api.post("/auth/register", {
+      await api.post("/auth/register", {
         name,
         email,
-        password
+        password,
       });
 
-      setMessage(response.data.message);
-
-      setName("");
-      setEmail("");
-      setPassword("");
+      // Redirect to Login after successful registration
+      navigate("/login", {
+        state: {
+          message: "Registration successful! Please log in.",
+        },
+      });
     } catch (error) {
       if (error.response) {
-        setError(error.response.data.message);
+        setError(
+          error.response.data.message || "Registration failed."
+        );
       } else {
         setError("Unable to connect to the server.");
       }
@@ -53,6 +57,7 @@ function Register() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
+            required
           />
         </div>
 
@@ -63,6 +68,7 @@ function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
+            required
           />
         </div>
 
@@ -73,15 +79,13 @@ function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
+            required
           />
         </div>
 
-        <button type="submit">
-          Register
-        </button>
+        <button type="submit">Register</button>
       </form>
 
-      {message && <p>{message}</p>}
       {error && <p>{error}</p>}
     </div>
   );
