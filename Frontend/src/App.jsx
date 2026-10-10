@@ -4,6 +4,7 @@ import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import api from "./api";
 import Register from "./Register";
 import Login from "./Login";
+import Profile from "./Profile";
 import "./App.css";
 
 function Calculator() {
@@ -241,6 +242,7 @@ function App() {
       <Route path="/" element={<Calculator />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }
